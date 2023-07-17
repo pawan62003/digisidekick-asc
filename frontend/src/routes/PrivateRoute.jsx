@@ -4,8 +4,9 @@ import { Navigate } from 'react-router-dom';
 const PrivateRoute = ({children}) => {
 
     const auth = localStorage.getItem("digi-asc")
-    if(!auth){
-        <Navigate to={'/signup'} />
+    console.log(auth.length)
+    if(auth.length===0){
+       return <Navigate to={'/signup'} />
     }
     
   return children;
