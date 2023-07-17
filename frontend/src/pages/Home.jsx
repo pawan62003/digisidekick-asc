@@ -89,6 +89,7 @@ const Home = () => {
 
  },[skill])
 
+ console.log(data)
  const handleDelete = (id) => {
   setDelid(id)
   setDelLoding(true)
@@ -115,16 +116,34 @@ const Home = () => {
 
 const submitupdate = (id) => {
   onClose()
-  //  axios.patch(`https://digi-asc-lmgc.onrender.com/users/${id}`,update)
-  //  .then(res => getData())
+  setUpdate({
+    name:"",
+    skill:"",
+    gender:"",
+    contact:""
+  })
+   axios.patch(`https://digi-asc-lmgc.onrender.com/users/${id}`,update)
+   .then(res => {
+    onClose()
+    getData()
+    toast({
+      title: 'Update successfully.',
+      description: "We've Update your data for you.",
+      status: 'success',
+      duration: 6000,
+      isClosable: true,
+      colorScheme:'blue',
+      position:"top"
+    })
+   })
   // axios.delete()
-  getData()
+ 
  }
  
-
   return (
     <div style={{width:"80%",margin:"auto"}}>
-     <div style={{width:"60%",margin:'auto',minWidth:"250px",marginTop:'8px',marginBottom:"8px",display:'flex',justifyContent:'space-evenly'}}>
+
+     <div style={{width:"80%",margin:'auto',minWidth:"250px",marginTop:'8px',marginBottom:"8px",display:'flex',justifyContent:'space-evenly'}}>
      <Input width={'40%'} value={keyword} onChange={(e)=>setKeyword(e.target.value)} placeholder='search by user name'/>
      <Select width={'40%'} onChange={(e)=>setSkill(e.target.value)} placeholder='Select option'>
         <option value='full stack Developer'>Full stack developer</option>
@@ -133,10 +152,17 @@ const submitupdate = (id) => {
         <option value='Node js Developer'>Node js developer</option>
      </Select>
      <Button colorScheme='red' onClick={handleLogout}>Logout</Button>
+     <Button colorScheme='blue' onClick={()=>{
+      navigate("/adduser")
+     }}>Add User</Button>
      </div>
       {
         loding?<Spinner />:""
       }
+
+      <div style={{margin:"10px"}}>
+      <Text fontSize={'24px'}>loginToken:-{localStorage.getItem("digi-asc")}</Text>
+      </div>
 
       <div>
         <SimpleGrid columns={[1,2,3]} spacing='10px'>
@@ -239,7 +265,7 @@ const submitupdate = (id) => {
                 <Button
                 onClick={()=>{
                   handleDelete(item._id)
-                  onOpen();
+                  
                 }}
                   w={'full'}
                   mt={8}
